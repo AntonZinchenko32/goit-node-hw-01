@@ -14,9 +14,14 @@ function listContacts() {
 function getContactById(contactId) {
   fs.readFile(contactsPath)
     .then((data) => {
-      const contactFound = JSON.parse(data).find(
-        (item) => item.id === contactId
-      );
+      let contactFound;
+
+      try {
+        contactFound = JSON.parse(data).find((item) => item.id === contactId);
+      } catch (e) {
+        console.log(e.message);
+      }
+
       if (contactFound) console.log(contactFound);
       else console.log(null);
     })
@@ -26,13 +31,21 @@ function getContactById(contactId) {
 function removeContact(contactId) {
   fs.readFile(contactsPath)
     .then((data) => {
-      const contactFound = JSON.parse(data).find(
-        (item) => item.id === contactId
-      );
+      let contactFound;
+      try {
+        contactFound = JSON.parse(data).find((item) => item.id === contactId);
+      } catch (e) {
+        console.log(e.message);
+      }
       if (contactFound) {
-        const filteredArr = JSON.parse(data).filter(
-          (item) => item.id !== contactId
-        );
+        let filteredArr;
+        try {
+          filteredArr = JSON.parse(data).filter(
+            (item) => item.id !== contactId
+          );
+        } catch (e) {
+          console.log(e.message);
+        }
         fs.writeFile(contactsPath, JSON.stringify(filteredArr))
           .then(() => console.log(contactFound))
           .catch((error) => console.log(error.message));
