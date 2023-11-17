@@ -13,17 +13,17 @@ function listContacts() {
         .catch(error => console.log(error.message));
 }
 
-function getContactById(contactId) {
-  // ...твой код. Возвращает объект контакта с таким id. Возвращает null, если объект с таким id не найден.
-}
+// function getContactById(contactId) {
+//   // ...твой код. Возвращает объект контакта с таким id. Возвращает null, если объект с таким id не найден.
+// }
 
-function removeContact(contactId) {
-  // ...твой код. Возвращает объект удаленного контакта. Возвращает null, если объект с таким id не найден.
-}
+// function removeContact(contactId) {
+//   // ...твой код. Возвращает объект удаленного контакта. Возвращает null, если объект с таким id не найден.
+// }
 
-function addContact(name, email, phone) {
-  // ...твой код. Возвращает объект добавленного контакта. 
-}
+// function addContact(name, email, phone) {
+//   // ...твой код. Возвращает объект добавленного контакта. 
+// }
 
 module.exports = {
 listContacts
