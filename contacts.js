@@ -17,7 +17,7 @@ function getContactById(contactId) {
       const contactFound = JSON.parse(data).find(
         (item) => item.id === contactId
       );
-      if (contactFound) console.table(contactFound);
+      if (contactFound) console.log(contactFound);
       else console.log(null);
     })
     .catch((error) => console.log(error.message));
@@ -29,8 +29,14 @@ function removeContact(contactId) {
       const contactFound = JSON.parse(data).find(
         (item) => item.id === contactId
       );
-      if (contactFound) console.table(contactFound);
-      else console.log(null);
+      if (contactFound) {
+        const filteredArr = JSON.parse(data).filter(
+          (item) => item.id !== contactId
+        );
+        fs.writeFile(contactsPath, JSON.stringify(filteredArr))
+          .then(() => console.log(contactFound))
+          .catch((error) => console.log(error.message));
+      } else console.log(null);
     })
     .catch((error) => console.log(error.message));
 }
@@ -48,4 +54,5 @@ module.exports = {
   listContacts,
   getContactById,
   addContact,
+  removeContact,
 };
