@@ -4,11 +4,10 @@ const path = require("path");
 
 const contactsPath = path.resolve(__dirname, "db/contacts.json");
 
-// TODO: задокументировать каждую функцию
 function listContacts() {
   fs.readFile(contactsPath)
     .then((data) => console.table(JSON.parse(data)))
-    .catch((error) => console.log(error.message));
+    .catch((e) => console.log(e.message));
 }
 
 function getContactById(contactId) {
@@ -25,7 +24,7 @@ function getContactById(contactId) {
       if (contactFound) console.log(contactFound);
       else console.log(null);
     })
-    .catch((error) => console.log(error.message));
+    .catch((e) => console.log(e.message));
 }
 
 function removeContact(contactId) {
@@ -48,10 +47,10 @@ function removeContact(contactId) {
         }
         fs.writeFile(contactsPath, JSON.stringify(filteredArr))
           .then(() => console.log(contactFound))
-          .catch((error) => console.log(error.message));
+          .catch((e) => console.log(e.message));
       } else console.log(null);
     })
-    .catch((error) => console.log(error.message));
+    .catch((e) => console.log(e.message));
 }
 
 function addContact(name, email, phone) {
