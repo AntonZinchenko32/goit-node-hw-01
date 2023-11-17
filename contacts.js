@@ -37,15 +37,15 @@ function removeContact(contactId) {
         console.log(e.message);
       }
       if (contactFound) {
-        let filteredArr;
+        let filteredArray;
         try {
-          filteredArr = JSON.parse(data).filter(
+          filteredArray = JSON.parse(data).filter(
             (item) => item.id !== contactId
           );
         } catch (e) {
           console.log(e.message);
         }
-        fs.writeFile(contactsPath, JSON.stringify(filteredArr))
+        fs.writeFile(contactsPath, JSON.stringify(filteredArray))
           .then(() => console.log(contactFound))
           .catch((e) => console.log(e.message));
       } else console.log(null);
@@ -54,12 +54,27 @@ function removeContact(contactId) {
 }
 
 function addContact(name, email, phone) {
-  console.table({
-    id: nanoid.nanoid(),
-    name,
-    email,
-    phone,
-  });
+  fs.readFile(contactsPath)
+    .then((data) => {
+      const newContact = {
+        id: nanoid.nanoid(),
+        name,
+        email,
+        phone,
+      };
+
+      let updatedArr;
+      try {
+        updatedArr = [...JSON.parse(data), newContact];
+      } catch (e) {
+        console.log(e.message);
+      }
+
+      fs.writeFile(contactsPath, JSON.stringify(updatedArr))
+        .then(() => console.log(newContact))
+        .catch((e) => console.log(e.message));
+    })
+    .catch((e) => console.log(e.message));
 }
 
 module.exports = {
