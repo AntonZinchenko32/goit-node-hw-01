@@ -4,77 +4,66 @@ const path = require("path");
 
 const contactsPath = path.resolve(__dirname, "db/contacts.json");
 
-function listContacts() {
-  fs.readFile(contactsPath)
-    .then((data) => console.table(JSON.parse(data)))
-    .catch((e) => console.log(e.message));
+function Parcer(data) {
+  try {
+    return JSON.parse(data);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
-function getContactById(contactId) {
-  fs.readFile(contactsPath)
-    .then((data) => {
-      let contactFound;
-
-      try {
-        contactFound = JSON.parse(data).find((item) => item.id === contactId);
-      } catch (e) {
-        console.log(e.message);
-      }
-
-      if (contactFound) console.log(contactFound);
-      else console.log(null);
-    })
+async function listContacts() {
+  const data = await fs
+    .readFile(contactsPath)
     .catch((e) => console.log(e.message));
+  console.table(Parcer(data));
 }
 
-function removeContact(contactId) {
-  fs.readFile(contactsPath)
-    .then((data) => {
-      let contactFound;
-      try {
-        contactFound = JSON.parse(data).find((item) => item.id === contactId);
-      } catch (e) {
-        console.log(e.message);
-      }
-      if (contactFound) {
-        let filteredArray;
-        try {
-          filteredArray = JSON.parse(data).filter(
-            (item) => item.id !== contactId
-          );
-        } catch (e) {
-          console.log(e.message);
-        }
-        fs.writeFile(contactsPath, JSON.stringify(filteredArray))
-          .then(() => console.log(contactFound))
-          .catch((e) => console.log(e.message));
-      } else console.log(null);
-    })
+async function getContactById(contactId) {
+  const data = await fs
+    .readFile(contactsPath)
     .catch((e) => console.log(e.message));
+
+  const contactFound = Parcer(data).find((item) => item.id === contactId);
+
+  contactFound ? console.log(contactFound) : console.log(null);
 }
 
-function addContact(name, email, phone) {
-  fs.readFile(contactsPath)
-    .then((data) => {
-      const newContact = {
-        id: nanoid.nanoid(),
-        name,
-        email,
-        phone,
-      };
-
-      let updatedArr;
-      try {
-        updatedArr = [...JSON.parse(data), newContact];
-      } catch (e) {
-        console.log(e.message);
-      }
-
-      fs.writeFile(contactsPath, JSON.stringify(updatedArr))
-        .then(() => console.log(newContact))
-        .catch((e) => console.log(e.message));
-    })
+async function removeContact(contactId) {
+  const data = await fs
+    .readFile(contactsPath)
     .catch((e) => console.log(e.message));
+
+  const contactFound = Parcer(data).find((item) => item.id === contactId);
+
+  if (contactFound) {
+    const filteredArray = Parcer(data).filter((item) => item.id !== contactId);
+
+    await fs
+      .writeFile(contactsPath, JSON.stringify(filteredArray))
+      .catch((e) => console.log(e.message));
+    console.log(contactFound);
+  } else console.log(null);
+}
+
+async function addContact(name, email, phone) {
+  const data = await fs
+    .readFile(contactsPath)
+    .catch((e) => console.log(e.message));
+
+  const newContact = {
+    id: nanoid.nanoid(),
+    name,
+    email,
+    phone,
+  };
+
+  const updatedArr = [...Parcer(data), newContact];
+
+  await fs
+    .writeFile(contactsPath, JSON.stringify(updatedArr))
+    .catch((e) => console.log(e.message));
+  console.log(newContact);
 }
 
 module.exports = {
